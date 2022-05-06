@@ -5,6 +5,7 @@ var Xojo;
         constructor(id, events) {
             super(id, events);
             this.mTextArea = document.createElement('textarea');
+            this.mTextLimit = 100;
             this.mCountLabel = document.createElement('span');
             const el = this.DOMElement('');
             el === null || el === void 0 ? void 0 : el.append(this.mTextArea, this.mCountLabel);
@@ -20,6 +21,9 @@ var Xojo;
             if (typeof json.text !== 'undefined') {
                 this.mTextArea.value = json.text;
             }
+            if (typeof json.textLimit !== 'undefined') {
+                this.mTextLimit = json.textLimit;
+            }
             this.refresh();
         }
         render() {
@@ -33,8 +37,8 @@ var Xojo;
             this.applyUserStyle(el);
         }
         updateLabel() {
-            this.mCountLabel.textContent = this.mTextArea.value.length + '/100';
-            this.mCountLabel.classList.toggle('limit-exceeded', this.mTextArea.value.length > 100);
+            this.mCountLabel.textContent = `${this.mTextArea.value.length}/${this.mTextLimit}`;
+            this.mCountLabel.classList.toggle('limit-exceeded', this.mTextArea.value.length > this.mTextLimit);
         }
     }
     Xojo.TextAreaWithCounter = TextAreaWithCounter;

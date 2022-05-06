@@ -1,6 +1,7 @@
 namespace Xojo {
     export class TextAreaWithCounter extends XojoWeb.XojoVisualControl {
         private mTextArea = document.createElement('textarea');
+        private mTextLimit = 100;
         private mCountLabel = document.createElement('span');
 
         constructor(id: string, events: string[]) {
@@ -24,6 +25,10 @@ namespace Xojo {
                 this.mTextArea.value = json.text;
             }
 
+            if (typeof json.textLimit !== 'undefined') {
+                this.mTextLimit = json.textLimit;
+            }
+
             this.refresh();
         }
 
@@ -40,8 +45,8 @@ namespace Xojo {
         }
 
         private updateLabel() {
-            this.mCountLabel.textContent = this.mTextArea.value.length + '/100';
-            this.mCountLabel.classList.toggle('limit-exceeded', this.mTextArea.value.length > 100);
+            this.mCountLabel.textContent = `${this.mTextArea.value.length}/${this.mTextLimit}`;
+            this.mCountLabel.classList.toggle('limit-exceeded', this.mTextArea.value.length > this.mTextLimit);
         }
     }
 }

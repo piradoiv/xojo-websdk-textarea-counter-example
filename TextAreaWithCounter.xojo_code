@@ -28,6 +28,7 @@ Inherits WebSDKUIControl
 	#tag Event
 		Sub Serialize(js as JSONItem)
 		  js.Value("text") = mText
+		  js.Value("textLimit") = mTextLimit
 		End Sub
 	#tag EndEvent
 
@@ -82,6 +83,10 @@ Inherits WebSDKUIControl
 		Private mText As String
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private mTextLimit As Integer = 100
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
@@ -97,11 +102,25 @@ Inherits WebSDKUIControl
 		Text As String
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Return mTextLimit
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mTextLimit = value
+			End Set
+		#tag EndSetter
+		TextLimit As Integer
+	#tag EndComputedProperty
+
 
 	#tag Constant, Name = kCSS, Type = String, Dynamic = False, Default = \".TextAreaWithCounter {\n    display: flex;\n    flex-direction: column;\n}\n\n.TextAreaWithCounter textarea {\n    height: 100%;\n    resize: none;\n}\n\n.TextAreaWithCounter span {\n    padding: 7px 0;\n}\n\n.TextAreaWithCounter span.limit-exceeded {\n    color: red;\n}", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kJavaScript, Type = String, Dynamic = False, Default = \"\"use strict\";\nvar Xojo;\n(function (Xojo) {\n    class TextAreaWithCounter extends XojoWeb.XojoVisualControl {\n        constructor(id\x2C events) {\n            super(id\x2C events);\n            this.mTextArea \x3D document.createElement(\'textarea\');\n            this.mCountLabel \x3D document.createElement(\'span\');\n            const el \x3D this.DOMElement(\'\');\n            el \x3D\x3D\x3D null || el \x3D\x3D\x3D void 0 \? void 0 : el.append(this.mTextArea\x2C this.mCountLabel);\n            el \x3D\x3D\x3D null || el \x3D\x3D\x3D void 0 \? void 0 : el.classList.add(\'form-group\');\n            this.mTextArea.classList.add(\'form-control\');\n            this.mTextArea.addEventListener(\'input\'\x2C () \x3D> {\n                this.updateLabel();\n            });\n        }\n        updateControl(data) {\n            super.updateControl(data);\n            const json \x3D JSON.parse(data);\n            if (typeof json.text !\x3D\x3D \'undefined\') {\n                this.mTextArea.value \x3D json.text;\n            }\n            this.refresh();\n        }\n        render() {\n            super.render();\n            const el \x3D this.DOMElement(\'\');\n            if (!el)\n                return;\n            this.setAttributes(el);\n            this.updateLabel();\n            this.applyTooltip(el);\n            this.applyUserStyle(el);\n        }\n        updateLabel() {\n            this.mCountLabel.textContent \x3D this.mTextArea.value.length + \'/100\';\n            this.mCountLabel.classList.toggle(\'limit-exceeded\'\x2C this.mTextArea.value.length > 100);\n        }\n    }\n    Xojo.TextAreaWithCounter \x3D TextAreaWithCounter;\n})(Xojo || (Xojo \x3D {}));\n", Scope = Private
+	#tag Constant, Name = kJavaScript, Type = String, Dynamic = False, Default = \"\"use strict\";\nvar Xojo;\n(function (Xojo) {\n    class TextAreaWithCounter extends XojoWeb.XojoVisualControl {\n        constructor(id\x2C events) {\n            super(id\x2C events);\n            this.mTextArea \x3D document.createElement(\'textarea\');\n            this.mTextLimit \x3D 100;\n            this.mCountLabel \x3D document.createElement(\'span\');\n            const el \x3D this.DOMElement(\'\');\n            el \x3D\x3D\x3D null || el \x3D\x3D\x3D void 0 \? void 0 : el.append(this.mTextArea\x2C this.mCountLabel);\n            el \x3D\x3D\x3D null || el \x3D\x3D\x3D void 0 \? void 0 : el.classList.add(\'form-group\');\n            this.mTextArea.classList.add(\'form-control\');\n            this.mTextArea.addEventListener(\'input\'\x2C () \x3D> {\n                this.updateLabel();\n            });\n        }\n        updateControl(data) {\n            super.updateControl(data);\n            const json \x3D JSON.parse(data);\n            if (typeof json.text !\x3D\x3D \'undefined\') {\n                this.mTextArea.value \x3D json.text;\n            }\n            if (typeof json.textLimit !\x3D\x3D \'undefined\') {\n                this.mTextLimit \x3D json.textLimit;\n            }\n            this.refresh();\n        }\n        render() {\n            super.render();\n            const el \x3D this.DOMElement(\'\');\n            if (!el)\n                return;\n            this.setAttributes(el);\n            this.updateLabel();\n            this.applyTooltip(el);\n            this.applyUserStyle(el);\n        }\n        updateLabel() {\n            this.mCountLabel.textContent \x3D `${this.mTextArea.value.length}/${this.mTextLimit}`;\n            this.mCountLabel.classList.toggle(\'limit-exceeded\'\x2C this.mTextArea.value.length > this.mTextLimit);\n        }\n    }\n    Xojo.TextAreaWithCounter \x3D TextAreaWithCounter;\n})(Xojo || (Xojo \x3D {}));\n", Scope = Private
 	#tag EndConstant
 
 
@@ -249,6 +268,14 @@ Inherits WebSDKUIControl
 			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TextLimit"
+			Visible=true
+			Group="Behavior"
+			InitialValue="100"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="TabIndex"
