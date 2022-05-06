@@ -3,6 +3,7 @@ namespace Xojo {
         private mTextArea = document.createElement('textarea');
         private mTextLimit = 100;
         private mCountLabel = document.createElement('span');
+        private mAllowExceedLimit = true;
 
         constructor(id: string, events: string[]) {
             super(id, events);
@@ -13,10 +14,15 @@ namespace Xojo {
             this.mTextArea.classList.add('form-control');
 
             this.mTextArea.addEventListener('input', () => {
-                this.updateLabel();
+                if (!this.mAllowExceedLimit) {
+                    this.mTextArea.value = this.mTextArea.value.substring(0, this.mTextLimit);
+                }
+
                 if (this.mTextArea.value.length > this.mTextLimit) {
                     this.triggerServerEvent('LimitExceeded', new XojoWeb.JSONItem(), false);
                 }
+
+                this.updateLabel();
             });
         }
 
@@ -31,6 +37,8 @@ namespace Xojo {
             if (typeof json.textLimit !== 'undefined') {
                 this.mTextLimit = json.textLimit;
             }
+
+            this.mAllowExceedLimit = json.mAllowExceedLimit;
 
             this.refresh();
         }

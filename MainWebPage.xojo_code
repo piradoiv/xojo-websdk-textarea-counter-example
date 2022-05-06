@@ -125,6 +125,7 @@ Begin WebPage MainWebPage
       _mPanelIndex    =   -1
    End
    Begin TextAreaWithCounter SDKExample
+      AllowExceedLimit=   False
       ControlID       =   ""
       Enabled         =   True
       Height          =   250
