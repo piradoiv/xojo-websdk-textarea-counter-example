@@ -162,6 +162,11 @@ End
 		  System.DebugLog("Limit exceeded!")
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Sub TextChanged()
+		  System.DebugLog("Text changed!: " + Me.Text)
+		End Sub
+	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty

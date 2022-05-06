@@ -5,6 +5,7 @@ var Xojo;
         constructor(id, events) {
             super(id, events);
             this.mTextArea = document.createElement('textarea');
+            this.mText = '';
             this.mTextLimit = 100;
             this.mCountLabel = document.createElement('span');
             this.mAllowExceedLimit = true;
@@ -16,6 +17,12 @@ var Xojo;
                 if (!this.mAllowExceedLimit) {
                     this.mTextArea.value = this.mTextArea.value.substring(0, this.mTextLimit);
                 }
+                if (this.mText !== this.mTextArea.value) {
+                    this.mText = this.mTextArea.value;
+                    const parameters = new XojoWeb.JSONItem();
+                    parameters.set('text', this.mTextArea.value);
+                    this.triggerServerEvent('TextChanged', parameters, false);
+                }
                 if (this.mTextArea.value.length > this.mTextLimit) {
                     this.triggerServerEvent('LimitExceeded', new XojoWeb.JSONItem(), false);
                 }
@@ -26,6 +33,7 @@ var Xojo;
             super.updateControl(data);
             const json = JSON.parse(data);
             if (typeof json.text !== 'undefined') {
+                this.mText = json.text;
                 this.mTextArea.value = json.text;
             }
             if (typeof json.textLimit !== 'undefined') {
@@ -45,8 +53,8 @@ var Xojo;
             this.applyUserStyle(el);
         }
         updateLabel() {
-            this.mCountLabel.textContent = `${this.mTextArea.value.length}/${this.mTextLimit}`;
-            this.mCountLabel.classList.toggle('limit-exceeded', this.mTextArea.value.length > this.mTextLimit);
+            this.mCountLabel.textContent = `${this.mText.length}/${this.mTextLimit}`;
+            this.mCountLabel.classList.toggle('limit-exceeded', this.mText.length > this.mTextLimit);
         }
     }
     Xojo.TextAreaWithCounter = TextAreaWithCounter;
