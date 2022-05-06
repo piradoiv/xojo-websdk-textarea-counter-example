@@ -3,7 +3,11 @@ Protected Class TextAreaWithCounter
 Inherits WebSDKUIControl
 	#tag Event
 		Sub DrawControlInLayoutEditor(g as graphics)
-		  
+		  g.DrawingColor = Color.RGB(200, 200, 200)
+		  g.DrawRoundRectangle(0, 0, g.Width, g.Height - 38, 10, 10)
+		  g.DrawingColor = Color.RGB(0, 0, 0)
+		  g.FontSize = 16
+		  g.DrawText("0/100", 0, g.Height - 14)
 		End Sub
 	#tag EndEvent
 
