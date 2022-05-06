@@ -155,6 +155,13 @@ End
 #tag WindowCode
 #tag EndWindowCode
 
+#tag Events SDKExample
+	#tag Event
+		Sub LimitExceeded()
+		  System.DebugLog("Limit exceeded!")
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="_mPanelIndex"

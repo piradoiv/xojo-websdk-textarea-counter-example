@@ -14,6 +14,9 @@ namespace Xojo {
 
             this.mTextArea.addEventListener('input', () => {
                 this.updateLabel();
+                if (this.mTextArea.value.length > this.mTextLimit) {
+                    this.triggerServerEvent('LimitExceeded', new XojoWeb.JSONItem(), false);
+                }
             });
         }
 

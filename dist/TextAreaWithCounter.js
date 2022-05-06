@@ -13,6 +13,9 @@ var Xojo;
             this.mTextArea.classList.add('form-control');
             this.mTextArea.addEventListener('input', () => {
                 this.updateLabel();
+                if (this.mTextArea.value.length > this.mTextLimit) {
+                    this.triggerServerEvent('LimitExceeded', new XojoWeb.JSONItem(), false);
+                }
             });
         }
         updateControl(data) {
